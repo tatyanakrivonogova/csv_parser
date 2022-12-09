@@ -5,7 +5,6 @@
 #include "CSVparser.h"
 #include "printTuple.h"
 
-
 int main()
 {
     //std::ifstream file("test.csv");
@@ -14,6 +13,6 @@ int main()
     //    std::cout << rs << std::endl;
     //}
 
-    auto t = std::make_tuple(1, 2, 3, "abc", 5.0);
+    auto t = std::make_tuple(1, "abc", 5.0);
     std::cout << t;
 }

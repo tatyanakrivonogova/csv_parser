@@ -14,7 +14,7 @@ private:
 	char columnDelimeter;
 	
 	template <typename CharT, typename Traits, typename Alloc>
-	void getLine(std::basic_istream<CharT, Traits>& is, std::basic_string<CharT, Traits, Alloc>& str) {
+	void getDataLine(std::basic_istream<CharT, Traits>& is, std::basic_string<CharT, Traits, Alloc>& str) {
 		str.clear();
 		char curr_symbol;
 		while (is.get(curr_symbol) != lineDelimeter) {
@@ -49,16 +49,16 @@ private:
 		inputIterator(std::ifstream& inputFile, size_t index, CSVparser<Args...>& parser) :
 			inputFile(inputFile), index(index), parser(parser) {
 			for (size_t i = 0; i < index; ++i) {
-				parser.getLine(inputFile, currentLine);
+				parser.getDataLine(inputFile, currentLine);
 			}
 		}
 
-		inputIterator operator++() { //to do
+		inputIterator operator++() {
 			if (index < parser.linesNumber) {
 				++index;
 				inputFile.seekg(0, std::ios::beg);
 				for (size_t i = 0; i < index; ++i) {
-					parser.getLine(inputFile, currentLine);
+					parser.getDataLine(inputFile, currentLine);
 				}
 			}
 			else {
@@ -89,7 +89,7 @@ private:
 		}
 
 		std::tuple<Args...> operator*() {
-			return CSVparser.parseLine(); // to do
+			return CSVparser.parseLine();
 		}
 	};
 
@@ -121,6 +121,4 @@ public:
 	std::tuple<Args...> parseLine(std::string& line, size_t lineIndex) { //to do
 
 	}
-
-
 };
