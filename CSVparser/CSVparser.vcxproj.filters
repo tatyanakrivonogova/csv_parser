@@ -29,5 +29,11 @@
     <ClInclude Include="inputIterator.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="appendTuple.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.csv" />
   </ItemGroup>
 </Project>
