@@ -51,15 +51,13 @@ private:
 	}
 
 	class inputIterator {
-	private:
-		std::ifstream& inputFile;
-		std::string currentLine = "";
-		size_t index;
-		CSVparser<Args...>& parser;
-		bool is_end = false;
+
 
 		friend class CSVparser;
 	public:
+		using data_type = std::tuple<Args...>;
+
+
 		inputIterator(std::ifstream& inputFile, size_t index, CSVparser<Args...>& parser) :
 			inputFile(inputFile), index(index), parser(parser) {
 			for (size_t i = 0; i < index; ++i) {
@@ -107,8 +105,17 @@ private:
 		}
 
 		std::tuple<Args...> operator*() {
-			return parser.parseLine(currentLine, index);
+			parser.parseLine(currentLine, current_tuple, index);
+			return current_tuple;
 		}
+
+	private:
+		data_type current_tuple;
+		std::ifstream& inputFile;
+		std::string currentLine = "";
+		size_t index;
+		CSVparser<Args...>& parser;
+		bool is_end = false;
 	};
 
 public:
@@ -136,8 +143,8 @@ public:
 		return end;
 	}
 
-	std::tuple<Args...> parseLine(std::string& line, size_t lineIndex) { //to do
-		size_t size = sizeof...(Args);
+	void parseLine(std::string& line, std::tuple<Args...>& data_tuple, size_t lineIndex) { //to do
+		int const size = std::tuple_size<std::tuple<Args...>>::value;
 
 		if (line.empty()) {
 			//throw std::invalid_argument("Empty line " + std::to_string(lineIndex));
@@ -149,14 +156,14 @@ public:
 			//throw std::invalid_argument("Number of fields in line " + std::to_string(lineIndex) + " is wrong");
 		}
 
-		std::tuple<Args...> types_tuple;
-		std::tuple<Args...> data_tuple;
+		//std::tuple<Args...> types_tuple;
+		//std::tuple<Args...> data_tuple;
 		//std::tuple<Args...>* data_tuple = new std::tuple<Args...>;
 
-		convertVectorToTuple(types_tuple, data_tuple, fields, 0);
+		//convertVectorToTuple(types_tuple, data_tuple, fields, 0);
+		addToTuple<size - 1, size, Args...>::Next(fields, data_tuple, lineIndex);
 
-
-		return data_tuple;
+		//return data_tuple;
 	}
 
 
