@@ -143,10 +143,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="appendTuple.h" />
     <ClInclude Include="CSVparser.h" />
-    <ClInclude Include="inputIterator.h" />
-    <ClInclude Include="printTuple.h" />
+    <ClInclude Include="tupleTools.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.csv" />

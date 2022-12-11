@@ -23,13 +23,7 @@
     <ClInclude Include="CSVparser.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="printTuple.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="inputIterator.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="appendTuple.h">
+    <ClInclude Include="tupleTools.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
