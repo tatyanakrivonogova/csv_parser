@@ -15,8 +15,8 @@ int main()
     }
 
     try {
-        CSVparser<std::string, int, double> parser(file, 0, '\n', ';');
-        for (std::tuple<std::string, int, double> rs : parser) {
+        CSVparser<std::string, char, double> parser(file, 0, ';', ',');
+        for (std::tuple<std::string, char, double> rs : parser) {
             std::cout << rs << std::endl;
         }
     }

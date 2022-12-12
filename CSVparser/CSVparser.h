@@ -11,6 +11,7 @@ private:
 	std::ifstream& inputFile;
 	size_t skipLines;
 	size_t linesNumber = 0;
+	std::streamoff charNumber = 0;
 	char lineDelimeter;
 	char columnDelimeter;
 
@@ -19,7 +20,7 @@ private:
 		str.clear();
 		char curr_symbol;
 		is.get(curr_symbol);
-		while (curr_symbol != lineDelimeter) {
+		while (is.tellg() != charNumber and curr_symbol != lineDelimeter) {
 			str += curr_symbol;
 			is.get(curr_symbol);
 		}
@@ -31,8 +32,10 @@ private:
 			size_t lineCount = 0;
 			std::string line;
 			inputFile.seekg(0, std::ios::beg);
-			while (std::getline(inputFile, line)) {
+			getDataLine(inputFile, line);
+			while (!line.empty()/*std::getline(inputFile, line)*/) {
 				++lineCount;
+				getDataLine(inputFile, line);
 			}
 			inputFile.clear();
 			linesNumber = lineCount;
@@ -51,7 +54,6 @@ private:
 			inputFile(inputFile), index(index), parser(parser) {
 			for (size_t i = 0; i < index; ++i) {
 				parser.getDataLine(inputFile, currentLine);
-				//strip(currentLine);
 			}
 		}
 
@@ -109,7 +111,14 @@ public:
 
 	CSVparser(std::ifstream& inputFile, size_t skipLines = 1, char lineDelimeter = '\n', char columnDelimeter = ';') :
 		inputFile(inputFile), skipLines(skipLines), lineDelimeter(lineDelimeter), columnDelimeter(columnDelimeter) {
+		
+		inputFile.seekg(0, std::ios_base::end);
+		charNumber = inputFile.tellg();
+		inputFile.seekg(0, std::ios::beg);
+		
 		linesNumber = getLinesNumber();
+
+
 		if (skipLines < 0 or skipLines > linesNumber) {
 			throw std::invalid_argument("Wrong skip lines number");
 		}

@@ -1,18 +1,42 @@
 #pragma once
 #include <tuple>
+#include <type_traits>
 #include <iostream>
 #include <vector>
 #include <string>
 #include <sstream>
 
 
-// for writing tuple
+//for writing tuple
 template <typename CharT, typename Traits, typename T>
 struct printElement {
     static void print(std::basic_ostream<CharT, Traits>& os, T elem) {
         os << elem << " ";
     }
 };
+
+//template <typename CharT, typename Traits, typename T>
+//static void printElement(std::basic_ostream<CharT, Traits>& os, T elem) {
+//    if (std::is_same<T, std::string>::value) {
+//        for (auto symbol : elem) {
+//            if (symbol == '\n') {
+//                os << "\n";
+//            }
+//            else if (symbol == '\t') {
+//                os << "\t";
+//            }
+//            else {
+//                os << symbol;
+//            }
+//        }
+//        os << " ";
+//    }
+//    else {
+//        os << elem << " ";
+//    }
+//}
+//
+
 
 template <typename CharT, typename Traits>
 struct printElement<CharT, Traits, std::string> {
@@ -32,7 +56,6 @@ struct printElement<CharT, Traits, std::string> {
     }
 };
 
-
 template <typename Head, typename... Tail>
 std::tuple<Tail...> tuple_tail(const std::tuple<Head, Tail...>& t) {
     return std::apply([](Head head, Tail... tail) {
@@ -42,12 +65,14 @@ std::tuple<Tail...> tuple_tail(const std::tuple<Head, Tail...>& t) {
 template <typename CharT, typename Traits, typename Head, typename ... Tail>
 std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, std::tuple<Head, Tail...> const& t) {
     printElement<CharT, Traits, Head>::print(os, std::get<0>(t));
+    //printElement(os, std::get<0>(t));
     return os << tuple_tail(t);
 }
 
 template <typename CharT, typename Traits, typename Last>
 std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, std::tuple<Last> const& t) {
     printElement<CharT, Traits, Last>::print(os, std::get<0>(t));
+    //printElement(os, std::get<0>(t));
     return os;
 }
 
