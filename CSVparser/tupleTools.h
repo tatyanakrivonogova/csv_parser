@@ -15,46 +15,28 @@ struct printElement {
     }
 };
 
-//template <typename CharT, typename Traits, typename T>
-//static void printElement(std::basic_ostream<CharT, Traits>& os, T elem) {
-//    if (std::is_same<T, std::string>::value) {
-//        for (auto symbol : elem) {
-//            if (symbol == '\n') {
-//                os << "\n";
-//            }
-//            else if (symbol == '\t') {
-//                os << "\t";
+
+//template <typename CharT, typename Traits>
+//struct printElement<CharT, Traits, std::string> {
+//    static void print(std::basic_ostream<CharT, Traits>& os, std::string elem) {
+//        for (auto it = elem.begin(); it < elem.end(); ++it) {
+//            if (*it == '\\') {
+//                if (*(it+1) == 'n') {
+//                    os << "\n";
+//                    ++it;
+//                }
+//                else if (*(it + 1) == 't') {
+//                    os << "\t";
+//                    ++it;
+//                }
 //            }
 //            else {
-//                os << symbol;
+//                os << *it;
 //            }
 //        }
 //        os << " ";
 //    }
-//    else {
-//        os << elem << " ";
-//    }
-//}
-//
-
-
-template <typename CharT, typename Traits>
-struct printElement<CharT, Traits, std::string> {
-    static void print(std::basic_ostream<CharT, Traits>& os, std::string elem) {
-        for (auto symbol : elem) {
-            if (symbol == '\n') {
-                os << "\n";
-            }
-            else if (symbol == '\t') {
-                os << "\t";
-            }
-            else {
-                os << symbol;
-            }
-        }
-        os << " ";
-    }
-};
+//};
 
 template <typename Head, typename... Tail>
 std::tuple<Tail...> tuple_tail(const std::tuple<Head, Tail...>& t) {
@@ -87,6 +69,25 @@ void type_cast(const std::string& str, T& value, size_t lineIndex, size_t index)
     check << value;
     if (str != check.str()) {
         throw std::runtime_error("Bad type of field number " + std::to_string(index+1) + " in line " + std::to_string(lineIndex));
+    }
+}
+
+template <>
+void type_cast<char>(const std::string& str, char& value, size_t lineIndex, size_t index) {
+    /*std::stringstream ss;
+    ss.str(str);
+
+    ss >> value;
+    std::stringstream check;
+    check << value;
+    if (str != check.str()) {
+        throw std::runtime_error("Bad type of field number " + std::to_string(index + 1) + " in line " + std::to_string(lineIndex));
+    }*/
+    if (str.length() > 1) {
+        throw std::runtime_error("Bad type of field number " + std::to_string(index + 1) + " in line " + std::to_string(lineIndex));
+    }
+    else {
+        value = str[0];
     }
 }
 

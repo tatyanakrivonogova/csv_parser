@@ -20,7 +20,7 @@ private:
 		str.clear();
 		char curr_symbol;
 		is.get(curr_symbol);
-		while (is.tellg() != charNumber and curr_symbol != lineDelimeter) {
+		while (is.tellg() != -1 and is.tellg() <= charNumber and curr_symbol != lineDelimeter) {
 			str += curr_symbol;
 			is.get(curr_symbol);
 		}
@@ -146,6 +146,7 @@ public:
 			throw std::invalid_argument("Empty line number " + std::to_string(lineIndex));
 		}
 
+		escapeCharReplace(line);
 		std::vector<std::string> fields = stringToVector(line, lineIndex);
 
 		if (fields.size() != size) {
@@ -156,15 +157,15 @@ public:
 	}
 
 
-	std::string& strip(std::string& str) {
-		while (isspace(str.front())) {
-			str.erase(0, 1);
-		}
-		while (isspace(str.back())) {
-			str.erase(str.length() - 1, 1);
-		}
-		return str;
-	}
+	//std::string& strip(std::string& str) {
+	//	while (str.front() == ' ') {
+	//		str.erase(0, 1);
+	//	}
+	//	while (str.back() == ' ') {
+	//		str.erase(str.length() - 1, 1);
+	//	}
+	//	return str;
+	//}
 
 
 	std::vector<std::string> stringToVector(std::string& line, size_t lineIndex) {
@@ -173,20 +174,88 @@ public:
 		std::vector<std::string> fieldsVector;
 		std::string current_field = "";
 
-		while (pos < line.length()) {
+		size_t length = line.length();
+		while (pos < length) {
 			if (line[pos] == columnDelimeter) {
-				fieldsVector.push_back(strip(current_field));
+				fieldsVector.push_back(current_field);
 				current_field.clear();
 				++pos;
 			}
-			current_field += line[pos];
-			++pos;
+			else {
+				current_field += line[pos];
+				++pos;
+			}
 		}
 
 		if (!current_field.empty()) {
-			fieldsVector.push_back(strip(current_field));
+			fieldsVector.push_back(current_field);
 		}
 
 		return fieldsVector;
+	}
+
+	void escapeCharReplace(std::string& str) {
+		/*size_t pos = str.find('\\');
+		while (pos != std::string::npos and str[pos+1] != '\\') {
+			if (str[pos + 1] == 'n') {
+				str.erase(str.begin() + pos, str.begin() + pos + 2);
+				str.insert(str.begin() + pos, '\n');
+			}
+			else if (str[pos + 1] == 't') {
+				str.erase(str.begin() + pos, str.begin() + pos + 2);
+				str.insert(str.begin() + pos, '\t');
+			}
+			else if (str[pos + 1] == 'r') {
+				str.erase(str.begin() + pos, str.begin() + pos + 2);
+				str.insert(str.begin() + pos, '\r');
+			}
+			else if (str[pos + 1] == 'b') {
+				str.erase(str.begin() + pos, str.begin() + pos + 2);
+				str.insert(str.begin() + pos, '\b');
+			}
+			else if (str[pos + 1] == '\'') {
+				str.erase(str.begin() + pos, str.begin() + pos + 2);
+				str.insert(str.begin() + pos, '\'');
+			}
+			else if (str[pos + 1] == '\"') {
+				str.erase(str.begin() + pos, str.begin() + pos + 2);
+				str.insert(str.begin() + pos, '\"');
+			}
+			pos = str.find('\\');
+		}*/
+		auto it = str.begin();
+		while (it < str.end()) {
+			if (*it == '\\') {
+				if (*(it + 1) == 'n') {
+					str.erase(it, it + 2);
+					str.insert(it, '\n');
+				}
+				else if (*(it + 1) == 't') {
+					str.erase(it, it + 2);
+					str.insert(it, '\t');
+				}
+				else if (*(it + 1) == 'r') {
+					str.erase(it, it + 2);
+					str.insert(it, '\r');
+				}
+				else if (*(it + 1) == 'b') {
+					str.erase(it, it + 2);
+					str.insert(it, '\b');
+				}
+				else if (*(it + 1) == '\'') {
+					str.erase(it, it + 2);
+					str.insert(it, '\'');
+				}
+				else if (*(it + 1) == '\"') {
+					str.erase(it, it + 2);
+					str.insert(it, '\"');
+				}
+				else if (*(it + 1) == '\\') {
+					str.erase(it, it + 2);
+					str.insert(it, '\\');
+				}
+			}
+			++it;
+		}
 	}
 };
