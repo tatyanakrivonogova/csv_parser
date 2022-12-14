@@ -33,7 +33,7 @@ private:
 			std::string line;
 			inputFile.seekg(0, std::ios::beg);
 			getDataLine(inputFile, line);
-			while (!line.empty()/*std::getline(inputFile, line)*/) {
+			while (!line.empty()) {
 				++lineCount;
 				getDataLine(inputFile, line);
 			}
@@ -157,17 +157,6 @@ public:
 	}
 
 
-	//std::string& strip(std::string& str) {
-	//	while (str.front() == ' ') {
-	//		str.erase(0, 1);
-	//	}
-	//	while (str.back() == ' ') {
-	//		str.erase(str.length() - 1, 1);
-	//	}
-	//	return str;
-	//}
-
-
 	std::vector<std::string> stringToVector(std::string& line, size_t lineIndex) {
 		size_t pos = 0;
 
@@ -195,34 +184,6 @@ public:
 	}
 
 	void escapeCharReplace(std::string& str) {
-		/*size_t pos = str.find('\\');
-		while (pos != std::string::npos and str[pos+1] != '\\') {
-			if (str[pos + 1] == 'n') {
-				str.erase(str.begin() + pos, str.begin() + pos + 2);
-				str.insert(str.begin() + pos, '\n');
-			}
-			else if (str[pos + 1] == 't') {
-				str.erase(str.begin() + pos, str.begin() + pos + 2);
-				str.insert(str.begin() + pos, '\t');
-			}
-			else if (str[pos + 1] == 'r') {
-				str.erase(str.begin() + pos, str.begin() + pos + 2);
-				str.insert(str.begin() + pos, '\r');
-			}
-			else if (str[pos + 1] == 'b') {
-				str.erase(str.begin() + pos, str.begin() + pos + 2);
-				str.insert(str.begin() + pos, '\b');
-			}
-			else if (str[pos + 1] == '\'') {
-				str.erase(str.begin() + pos, str.begin() + pos + 2);
-				str.insert(str.begin() + pos, '\'');
-			}
-			else if (str[pos + 1] == '\"') {
-				str.erase(str.begin() + pos, str.begin() + pos + 2);
-				str.insert(str.begin() + pos, '\"');
-			}
-			pos = str.find('\\');
-		}*/
 		auto it = str.begin();
 		while (it < str.end()) {
 			if (*it == '\\') {

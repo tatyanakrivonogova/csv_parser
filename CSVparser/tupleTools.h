@@ -16,28 +16,6 @@ struct printElement {
 };
 
 
-//template <typename CharT, typename Traits>
-//struct printElement<CharT, Traits, std::string> {
-//    static void print(std::basic_ostream<CharT, Traits>& os, std::string elem) {
-//        for (auto it = elem.begin(); it < elem.end(); ++it) {
-//            if (*it == '\\') {
-//                if (*(it+1) == 'n') {
-//                    os << "\n";
-//                    ++it;
-//                }
-//                else if (*(it + 1) == 't') {
-//                    os << "\t";
-//                    ++it;
-//                }
-//            }
-//            else {
-//                os << *it;
-//            }
-//        }
-//        os << " ";
-//    }
-//};
-
 template <typename Head, typename... Tail>
 std::tuple<Tail...> tuple_tail(const std::tuple<Head, Tail...>& t) {
     return std::apply([](Head head, Tail... tail) {
